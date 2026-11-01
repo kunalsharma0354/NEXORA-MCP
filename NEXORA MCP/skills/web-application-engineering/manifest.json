@@ -1,0 +1,21 @@
+{
+  "id": "web-application-engineering",
+  "name": "Production Web Application Engineering",
+  "version": "1.0.0",
+  "description": "Implement maintainable full-stack web features that fit the existing codebase and have clear runtime behavior.",
+  "category": "web-development",
+  "tags": [
+    "web",
+    "full-stack",
+    "architecture",
+    "implementation"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

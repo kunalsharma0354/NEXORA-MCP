@@ -1,0 +1,22 @@
+{
+  "id": "debugging-root-cause",
+  "name": "Debugging & Root-Cause Analysis",
+  "version": "1.0.0",
+  "description": "Diagnose defects systematically, isolate root causes, make minimal fixes, and prevent regressions.",
+  "category": "debugging",
+  "tags": [
+    "debugging",
+    "errors",
+    "logs",
+    "root-cause",
+    "regression"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

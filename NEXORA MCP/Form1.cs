@@ -257,7 +257,9 @@ namespace NEXORA_MCP
         {
             try
             {
-                var dashboard = new DashboardForm();
+                // Prefer the Next.js (WebView2) dashboard; gracefully fall back to
+                // the legacy WinForms dashboard when the webui build is missing.
+                var dashboard = WebDashboardForm.CreateDashboard();
                 dashboard.FormClosed += (_, _) => this.Close();
                 this.Hide();
                 dashboard.Show();
@@ -305,6 +307,20 @@ namespace NEXORA_MCP
                 TokenStore.SaveSession(result.Token, result.Username, hwid, result.Expiry, DateTime.UtcNow);
                 TokenStore.SaveToDisk();
 
+                // Diagnosable trail: the MCP server reads the same log file, so a
+                // "Not logged in" error in OpenCode can be traced back to the login.
+                bool persisted;
+                try
+                {
+                    persisted = File.Exists(Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "Nexora", "session.json"));
+                }
+                catch { persisted = false; }
+
+                ActivityLogger.LogEvent("auth",
+                    $"login ok user={result.Username} expiry={result.Expiry:u} persisted={persisted} expiry_in={(result.Expiry - DateTime.UtcNow).TotalDays:F1}d");
+
                 _lblStatus.ForeColor = UITheme.Success;
                 _lblStatus.Text = $"✓ Signed in as {result.Username}";
 
@@ -314,11 +330,13 @@ namespace NEXORA_MCP
             }
             catch (AuthException ex)
             {
+                ActivityLogger.LogEvent("auth", $"login failed user={username} http={ex.HttpStatus} err={ex.Message}");
                 _lblStatus.ForeColor = UITheme.Error;
                 _lblStatus.Text = ex.Message;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ActivityLogger.LogEvent("auth", $"login failed user={username} unexpected err={ex.Message}");
                 _lblStatus.ForeColor = UITheme.Error;
                 _lblStatus.Text = "Something went wrong. Please try again.";
             }

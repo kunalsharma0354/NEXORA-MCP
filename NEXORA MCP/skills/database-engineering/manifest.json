@@ -1,0 +1,17 @@
+{
+  "id": "database-engineering",
+  "name": "Database Engineering",
+  "version": "1.0.0",
+  "category": "Database Engineering",
+  "status": "available",
+  "trust": "trusted",
+  "author": "NEXORA",
+  "created": "2026-10-21",
+  "updated": "2026-10-21",
+  "description": "Schema design, integrity constraints, safe migrations and query shape for existing storage.",
+  "purpose": "Load when changing a schema, adding a table, writing migrations or reviewing query behaviour.",
+  "tags": ["schema", "integrity", "migrations", "queries", "indexes"],
+  "dependencies": [],
+  "requiresTools": ["filesystem", "terminal"],
+  "provides": ["schema-change-plan", "migration-checklist"]
+}

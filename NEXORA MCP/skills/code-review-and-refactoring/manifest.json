@@ -1,0 +1,21 @@
+{
+  "id": "code-review-and-refactoring",
+  "name": "Code Review & Safe Refactoring",
+  "version": "1.0.0",
+  "description": "Review code for correctness and maintainability, and refactor incrementally while preserving externally observable behavior.",
+  "category": "code-quality",
+  "tags": [
+    "code-review",
+    "refactoring",
+    "maintainability",
+    "diff"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

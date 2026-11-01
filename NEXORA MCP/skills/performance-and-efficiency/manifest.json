@@ -1,0 +1,22 @@
+{
+  "id": "performance-and-efficiency",
+  "name": "Performance & Resource Efficiency",
+  "version": "1.0.0",
+  "description": "Identify and address measured performance bottlenecks without sacrificing correctness or maintainability.",
+  "category": "performance",
+  "tags": [
+    "performance",
+    "profiling",
+    "caching",
+    "optimization",
+    "latency"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

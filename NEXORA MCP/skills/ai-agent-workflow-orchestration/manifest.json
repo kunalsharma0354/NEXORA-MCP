@@ -1,0 +1,22 @@
+{
+  "id": "ai-agent-workflow-orchestration",
+  "name": "AI Agent Workflow Orchestration",
+  "version": "1.0.0",
+  "description": "Design bounded, observable multi-step agent workflows with explicit state, stop conditions, and human approval boundaries.",
+  "category": "mcp-and-agents",
+  "tags": [
+    "agents",
+    "orchestration",
+    "planning",
+    "tool-use",
+    "retries"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

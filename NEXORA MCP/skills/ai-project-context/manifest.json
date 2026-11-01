@@ -1,0 +1,17 @@
+{
+  "id": "ai-project-context",
+  "name": "AI Project Context",
+  "version": "1.0.0",
+  "category": "Project Management",
+  "status": "available",
+  "trust": "trusted",
+  "author": "NEXORA (production skills starter)",
+  "created": "2026-10-21",
+  "updated": "2026-10-21",
+  "description": "Inspect a project, create or maintain a structured .ai/ Markdown context folder, and use that context to make accurate, token-efficient changes without guessing.",
+  "purpose": "Use when starting work in an unfamiliar codebase, onboarding to a repository, implementing features, debugging, refactoring, or when project context may be stale.",
+  "tags": ["context", "onboarding", "knowledge-base", "documentation", "token-efficiency", "project-inspection"],
+  "dependencies": [],
+  "requiresTools": ["filesystem"],
+  "provides": ["ai-context-folder", "verified-project-facts"]
+}

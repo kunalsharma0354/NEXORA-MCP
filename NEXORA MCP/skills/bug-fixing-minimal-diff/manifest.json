@@ -1,0 +1,33 @@
+{
+  "id": "bug-fixing-minimal-diff",
+  "name": "Bug Fixing & Minimal-Diff Engineering",
+  "version": "1.0.0",
+  "description": "Diagnoses bugs, identifies root causes, and applies the smallest safe, maintainable fix without unnecessary code or unrelated refactoring.",
+  "entrypoint": "SKILL.md",
+  "tags": [
+    "bug-fixing",
+    "debugging",
+    "minimal-diff",
+    "root-cause-analysis",
+    "regression-prevention",
+    "code-quality"
+  ],
+  "activation": {
+    "triggers": [
+      "fix a bug",
+      "debug an error",
+      "resolve a failing test",
+      "investigate unexpected behavior",
+      "repair a regression",
+      "simplify a bug fix"
+    ]
+  },
+  "capabilities_required": [],
+  "safety": {
+    "read_before_write": true,
+    "require_tests_when_feasible": true,
+    "avoid_unrelated_refactors": true,
+    "preserve_existing_architecture": true,
+    "destructive_actions_require_confirmation": true
+  }
+}

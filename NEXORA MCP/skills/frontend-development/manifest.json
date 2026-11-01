@@ -1,0 +1,17 @@
+{
+  "id": "frontend-development",
+  "name": "Frontend Development",
+  "version": "1.0.0",
+  "category": "Frontend Development",
+  "status": "available",
+  "trust": "trusted",
+  "author": "NEXORA",
+  "created": "2026-10-21",
+  "updated": "2026-10-21",
+  "description": "Component architecture, state ownership, responsive layout and maintainable rendering for existing front-end codebases.",
+  "purpose": "Load when adding or changing UI components, layouts, state or interaction behaviour.",
+  "tags": ["components", "state", "responsive", "css", "maintainability"],
+  "dependencies": ["ui-ux-design"],
+  "requiresTools": ["filesystem", "terminal"],
+  "provides": ["component-design", "state-model"]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "security-review",
+  "name": "Application Security Review",
+  "version": "1.0.0",
+  "description": "Review application changes for common security weaknesses and apply risk-appropriate mitigations.",
+  "category": "security",
+  "tags": [
+    "security",
+    "owasp",
+    "auth",
+    "secrets",
+    "input-validation"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

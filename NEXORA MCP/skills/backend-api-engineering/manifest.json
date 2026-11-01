@@ -1,0 +1,22 @@
+{
+  "id": "backend-api-engineering",
+  "name": "Backend & API Engineering",
+  "version": "1.0.0",
+  "description": "Build robust API and service boundaries with validation, authorization, predictable errors, and observable behavior.",
+  "category": "backend-development",
+  "tags": [
+    "backend",
+    "api",
+    "validation",
+    "authorization",
+    "http"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

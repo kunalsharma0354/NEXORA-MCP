@@ -19,6 +19,28 @@
     <None Update="sysprompot.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="sysprompt-humanize.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- Skills registry: file-based source of truth (skills/<id>/manifest.json
+       + SKILL.md), copied next to the exe so the dashboard and the MCP server
+       read the same tree. Add a skill = drop in a folder + rebuild. -->
+  <ItemGroup>
+    <None Include="skills\**\*"
+          CopyToOutputDirectory="PreserveNewest"
+          Link="skills\%(RecursiveDir)%(Filename)%(Extension)"
+          Visible="false" />
+  </ItemGroup>
+
+  <!-- Next.js static build (web/ → npm run build → web/out) served to the
+       dashboard WebView2 via SetVirtualHostNameToFolderMapping → webui\ -->
+  <ItemGroup>
+    <None Include="web\out\**\*"
+          CopyToOutputDirectory="PreserveNewest"
+          Link="webui\%(RecursiveDir)%(Filename)%(Extension)"
+          Visible="false" />
   </ItemGroup>
 
 </Project>

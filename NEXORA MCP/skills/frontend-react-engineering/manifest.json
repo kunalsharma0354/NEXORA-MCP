@@ -1,0 +1,22 @@
+{
+  "id": "frontend-react-engineering",
+  "name": "Frontend & React Engineering",
+  "version": "1.0.0",
+  "description": "Build reliable component-driven interfaces with predictable state, accessible interaction, and maintainable rendering logic.",
+  "category": "frontend-development",
+  "tags": [
+    "frontend",
+    "react",
+    "components",
+    "state",
+    "typescript"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

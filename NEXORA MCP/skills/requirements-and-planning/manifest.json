@@ -1,0 +1,21 @@
+{
+  "id": "requirements-and-planning",
+  "name": "Requirements & Delivery Planning",
+  "version": "1.0.0",
+  "description": "Turn ambiguous requests into scoped, testable requirements and an implementation plan grounded in the existing repository.",
+  "category": "general-development",
+  "tags": [
+    "requirements",
+    "planning",
+    "acceptance-criteria",
+    "scope"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "browser-automation-verification",
+  "name": "Browser Automation & Real-World Verification",
+  "version": "1.0.0",
+  "description": "Use an available browser automation interface to validate real application flows and report evidence-backed findings.",
+  "category": "testing",
+  "tags": [
+    "browser",
+    "automation",
+    "playwright",
+    "verification",
+    "ui-testing"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

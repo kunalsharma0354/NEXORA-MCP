@@ -1,0 +1,22 @@
+{
+  "id": "api-integration-resilience",
+  "name": "External API & Integration Reliability",
+  "version": "1.0.0",
+  "description": "Integrate external services with explicit contracts, secure credentials, timeouts, retries, and observable failures.",
+  "category": "integrations",
+  "tags": [
+    "api",
+    "integration",
+    "timeouts",
+    "retries",
+    "webhooks"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

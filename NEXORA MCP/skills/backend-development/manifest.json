@@ -1,0 +1,17 @@
+{
+  "id": "backend-development",
+  "name": "Backend Development",
+  "version": "1.0.0",
+  "category": "Backend Development",
+  "status": "available",
+  "trust": "trusted",
+  "author": "NEXORA",
+  "created": "2026-10-21",
+  "updated": "2026-10-21",
+  "description": "Service boundaries, business logic, input validation and failure handling for server-side changes.",
+  "purpose": "Load when adding an endpoint, a service method, a background job or changing server-side logic.",
+  "tags": ["services", "validation", "errors", "business-logic", "api"],
+  "dependencies": [],
+  "requiresTools": ["filesystem", "terminal"],
+  "provides": ["service-design", "error-contract"]
+}

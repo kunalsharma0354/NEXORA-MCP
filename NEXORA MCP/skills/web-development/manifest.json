@@ -1,0 +1,17 @@
+{
+  "id": "web-development",
+  "name": "Web Development",
+  "version": "1.0.0",
+  "category": "Web Development",
+  "status": "available",
+  "trust": "trusted",
+  "author": "NEXORA",
+  "created": "2026-10-21",
+  "updated": "2026-10-21",
+  "description": "Turns a vague web request into an inspected, planned, implemented and verified change inside the existing codebase.",
+  "purpose": "Load before starting any web feature, page or integration so the work starts from the real repository state instead of assumptions.",
+  "tags": ["requirements", "inspection", "planning", "completion-criteria", "web"],
+  "dependencies": ["frontend-development", "backend-development"],
+  "requiresTools": ["filesystem", "terminal"],
+  "provides": ["implementation-plan", "completion-criteria"]
+}

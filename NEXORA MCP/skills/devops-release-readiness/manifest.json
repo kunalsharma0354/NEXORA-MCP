@@ -1,0 +1,22 @@
+{
+  "id": "devops-release-readiness",
+  "name": "DevOps & Release Readiness",
+  "version": "1.0.0",
+  "description": "Prepare changes for reproducible builds, safe configuration, controlled deployment, and rollback-aware releases.",
+  "category": "devops",
+  "tags": [
+    "devops",
+    "ci",
+    "deployment",
+    "configuration",
+    "release"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

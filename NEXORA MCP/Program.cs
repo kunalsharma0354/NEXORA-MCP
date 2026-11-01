@@ -14,6 +14,13 @@ namespace NEXORA_MCP
         [STAThread]
         static void Main(string[] args)
         {
+            // ── Skills registry self-check (console + log file, exit code 0/1) ──
+            if (args.Length > 0 && args[0] == "--skills-check")
+            {
+                Environment.ExitCode = SkillsCheck.Run();
+                return;
+            }
+
             // ── MCP Server Mode: launched with --mcp flag by OpenCode ──
             if (args.Length > 0 && args[0] == "--mcp")
             {
@@ -73,6 +80,10 @@ namespace NEXORA_MCP
 
             try
             {
+                // Hot-reload: the running MCP server picks up a fresh app login
+                // (or logout / expiry repair) from session.json on every call,
+                // so OpenCode never needs to be restarted for token changes.
+                TokenStore.EnsureFresh();
                 if (!TokenStore.IsLoggedIn) TokenStore.LoadFromDisk();
                 if (!TokenStore.IsLoggedIn)
                 {
@@ -87,8 +98,18 @@ namespace NEXORA_MCP
             }
             catch (Exception ex)
             {
-                ActivityLogger.CompletePending("nexora_enhance_prompt", prompt, "", model, success: false, error: ex.Message);
-                return $"Error enhancing prompt: {ex.Message}";
+                // A 401 usually means the stored token was invalidated server-side
+                // (e.g. after an API-key rotation) while the local session file still
+                // exists — drop it from memory so the next call reloads from disk,
+                // and point the user at a fresh login instead of a wall of JSON.
+                if (ex.Message.Contains("returned 401")) TokenStore.InvalidateMemory();
+
+                var message = ex.Message.Contains("returned 401")
+                    ? "NEXORA rejected your session token (401). Open the NEXORA MCP app and sign in again, then retry."
+                    : ex.Message;
+
+                ActivityLogger.CompletePending("nexora_enhance_prompt", prompt, "", model, success: false, error: message);
+                return $"Error enhancing prompt: {message}";
             }
         }
     }

@@ -1,0 +1,17 @@
+{
+  "id": "ui-ux-design",
+  "name": "UI/UX Design",
+  "version": "1.0.0",
+  "category": "UI/UX Design",
+  "status": "available",
+  "trust": "trusted",
+  "author": "NEXORA",
+  "created": "2026-10-21",
+  "updated": "2026-10-21",
+  "description": "Visual hierarchy, spacing, typography and interaction consistency inside an existing design system.",
+  "purpose": "Load when a new screen must look native to the product instead of like a separate template.",
+  "tags": ["hierarchy", "typography", "spacing", "design-system", "interaction"],
+  "dependencies": [],
+  "requiresTools": ["filesystem"],
+  "provides": ["ui-spec", "design-review"]
+}

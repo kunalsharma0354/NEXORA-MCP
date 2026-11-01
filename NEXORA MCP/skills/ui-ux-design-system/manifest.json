@@ -1,0 +1,22 @@
+{
+  "id": "ui-ux-design-system",
+  "name": "UI/UX & Design Systems",
+  "version": "1.0.0",
+  "description": "Create coherent, usable product interfaces with clear hierarchy, reusable design tokens, and polished interaction states.",
+  "category": "design",
+  "tags": [
+    "ui",
+    "ux",
+    "design-system",
+    "visual-design",
+    "responsive"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

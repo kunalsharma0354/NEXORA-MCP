@@ -3,6 +3,10 @@ bin/
 obj/
 out/
 
+# Next.js dashboard app
+NEXORA MCP/web/node_modules/
+NEXORA MCP/web/.next/
+
 # Visual Studio
 .vs/
 *.user
@@ -16,3 +20,7 @@ out/
 # OS
 Thumbs.db
 Desktop.ini
+
+# Distribution artifacts (extracted skills already live in NEXORA MCP/skills/)
+nexora-production-skills-starter-v1/
+*.zip

@@ -31,18 +31,54 @@ namespace NEXORA_MCP
 
         public static bool IsLoggedIn => !string.IsNullOrWhiteSpace(AccessToken);
 
+        // Last-write stamp of session.json as we last saw it — lets a running MCP
+        // server (spawned by OpenCode) pick up a fresh login/logout done by the app
+        // WITHOUT any restart. OpenCode only ever calls this exe; everything
+        // session-related lives here and on disk.
+        private static DateTime _seenStampUtc = DateTime.MinValue;
+
+        /// <summary>Reloads the in-memory session from disk when session.json has
+        /// changed since we last read it (new login, logout, expiry repair...).
+        /// Cheap: one FileInfo stat per call.</summary>
+        public static void EnsureFresh()
+        {
+            try
+            {
+                var fi = new FileInfo(SessionFilePath);
+                var stamp = fi.Exists ? fi.LastWriteTimeUtc : DateTime.MinValue;
+                if (stamp == _seenStampUtc) return;
+
+                InvalidateMemory();
+                LoadFromDisk();
+            }
+            catch
+            {
+                // Disk hiccup — keep whatever memory state we have.
+            }
+        }
+
         public static void SaveSession(string token, string username, string deviceId, DateTime? expiry, DateTime? issuedAt)
         {
             AccessToken = token ?? string.Empty;
             Username = username ?? string.Empty;
             DeviceId = deviceId ?? string.Empty;
             TokenIssuedAt = issuedAt ?? DateTime.UtcNow;
-            TokenExpiry = expiry ?? TokenIssuedAt.AddDays(30);
 
-            // If the expiry is not directly provided, try to decode it from the JWT payload.
-            if (expiry == null && !string.IsNullOrEmpty(token) && TryDecodeExpiry(token, out var exp))
+            // Never keep a past expiry: a unit mismatch (seconds vs milliseconds)
+            // would invalidate the session the moment it is reloaded from disk.
+            var effective = expiry != null && expiry.Value > TokenIssuedAt && expiry.Value > DateTime.UtcNow ? expiry : null;
+
+            if (effective != null)
             {
-                TokenExpiry = exp;
+                TokenExpiry = effective.Value;
+            }
+            else if (TryDecodeExpiry(AccessToken, out var jwtExp) && jwtExp > DateTime.UtcNow)
+            {
+                TokenExpiry = jwtExp;
+            }
+            else
+            {
+                TokenExpiry = TokenIssuedAt.AddDays(30);
             }
         }
 
@@ -66,6 +102,7 @@ namespace NEXORA_MCP
 
                 var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(SessionFilePath, json);
+                _seenStampUtc = new FileInfo(SessionFilePath).LastWriteTimeUtc;
             }
             catch (Exception)
             {
@@ -77,13 +114,31 @@ namespace NEXORA_MCP
         {
             try
             {
-                if (!File.Exists(SessionFilePath)) return;
+                var fi = new FileInfo(SessionFilePath);
+                if (!fi.Exists)
+                {
+                    _seenStampUtc = DateTime.MinValue;
+                    return;
+                }
+                _seenStampUtc = fi.LastWriteTimeUtc;
+
                 var json = File.ReadAllText(SessionFilePath);
                 var data = JsonSerializer.Deserialize<SessionData>(json);
                 if (data is null || string.IsNullOrWhiteSpace(data.Token)) return;
 
                 if (data.Expiry != default && data.Expiry < DateTime.UtcNow)
                 {
+                    // Self-heal for sessions written by older builds that stored a
+                    // bogus expiry (seconds/milliseconds unit mismatch): if the token
+                    // itself still carries a valid JWT exp, repair the file instead of
+                    // throwing the login away.
+                    if (TryDecodeExpiry(data.Token, out var jwtExp) && jwtExp > DateTime.UtcNow)
+                    {
+                        SaveSession(data.Token, data.Username, data.DeviceId, jwtExp, data.IssuedAt);
+                        SaveToDisk();
+                        return;
+                    }
+
                     DeleteFromDisk();
                     return;
                 }
@@ -101,11 +156,25 @@ namespace NEXORA_MCP
             try
             {
                 if (File.Exists(SessionFilePath)) File.Delete(SessionFilePath);
+                _seenStampUtc = DateTime.MinValue;
             }
             catch (Exception)
             {
                 // Ignore.
             }
+        }
+
+        /// <summary>Clears only the in-memory session, not the disk file. Used when a
+        /// stored token turns out to be dead (server-side 401, e.g. after a key
+        /// rotation): the next call reloads from disk, so a fresh app login is
+        /// picked up immediately without restarting OpenCode.</summary>
+        public static void InvalidateMemory()
+        {
+            AccessToken = string.Empty;
+            Username = string.Empty;
+            DeviceId = string.Empty;
+            TokenIssuedAt = DateTime.MinValue;
+            TokenExpiry = DateTime.MinValue;
         }
 
         public static void ClearSession()

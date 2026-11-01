@@ -1,0 +1,21 @@
+{
+  "id": "prompt-specification-engineering",
+  "name": "Prompt & Specification Engineering",
+  "version": "1.0.0",
+  "description": "Transform vague user requests into precise, implementation-ready specifications without changing intent or inventing facts.",
+  "category": "ai-and-prompts",
+  "tags": [
+    "prompt-engineering",
+    "specification",
+    "acceptance-criteria",
+    "ai"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}

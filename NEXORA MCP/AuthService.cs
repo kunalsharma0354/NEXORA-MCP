@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace NEXORA_MCP
@@ -38,14 +39,19 @@ namespace NEXORA_MCP
             if (string.IsNullOrWhiteSpace(hwid))
                 throw new AuthException("Device ID is unavailable.");
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, $"{TokenStore.BaseUrl}/api/auth-login")
+            var loginUrl = $"{TokenStore.BaseUrl}/api/auth-login";
+            var payload = JsonSerializer.Serialize(new
             {
-                Content = JsonContent.Create(new
-                {
-                    username,
-                    password,
-                    hwid
-                })
+                username,
+                password,
+                hwid
+            });
+
+            var net = NetworkLog.Begin("auth", "POST", loginUrl, payload.Length);
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, loginUrl)
+            {
+                Content = new StringContent(payload, Encoding.UTF8, "application/json")
             };
             request.Headers.Add("Accept", "application/json");
 
@@ -56,20 +62,24 @@ namespace NEXORA_MCP
             }
             catch (OperationCanceledException) when (!ct.IsCancellationRequested)
             {
+                NetworkLog.Fail(net, "Timeout after 30s (no server response)");
                 throw new AuthException("The server is taking too long to respond. Try again.");
             }
             catch (OperationCanceledException)
             {
+                NetworkLog.Fail(net, "Login cancelled");
                 throw;
             }
             catch (Exception)
             {
+                NetworkLog.Fail(net, "Network error (connection failed)");
                 throw new AuthException("Network error. Check your internet connection and try again.");
             }
 
             using (response)
             {
                 string raw = await response.Content.ReadAsStringAsync(ct);
+                NetworkLog.Complete(net, (int)response.StatusCode, raw.Length);
                 return HandleResponse(response, raw);
             }
         }
@@ -99,9 +109,15 @@ namespace NEXORA_MCP
                     DateTime? expiry = null;
                     if (root.TryGetProperty("user", out var user) && user.TryGetProperty("expiry", out var expEl))
                     {
-                        var expiryRaw = expEl.ValueKind == JsonValueKind.Number ? expEl.GetInt64() : (long)expEl.GetDouble();
-                        expiry = DateTimeOffset.FromUnixTimeMilliseconds(expiryRaw).UtcDateTime;
+                        expiry = ParseExpiry(expEl);
                     }
+
+                    // A past expiry means the field arrived in a shape we cannot trust
+                    // (or the server genuinely returned garbage) — ignore it and let
+                    // TokenStore fall back to the JWT exp / 30-day default, otherwise a
+                    // unit mismatch (seconds vs milliseconds) would instantly invalidate
+                    // every saved session.
+                    if (expiry.HasValue && expiry.Value <= DateTime.UtcNow) expiry = null;
 
                     return new LoginResult(token, name, expiry ?? DateTime.UtcNow.AddDays(30));
                 }
@@ -128,6 +144,57 @@ namespace NEXORA_MCP
                         ? "Something went wrong on the server. Try again later."
                         : httpError, (int)response.StatusCode);
             }
+        }
+
+        /// <summary>Parses an expiry field whatever shape the server sends it in:
+        /// seconds-since-epoch, milliseconds-since-epoch, numeric string or ISO date
+        /// string. Returns null when the value cannot be interpreted.</summary>
+        private static DateTime? ParseExpiry(JsonElement el)
+        {
+            try
+            {
+                switch (el.ValueKind)
+                {
+                    case JsonValueKind.Number:
+                        return InterpretLong(el.TryGetInt64(out var n) ? n : (long)el.GetDouble());
+
+                    case JsonValueKind.String:
+                    {
+                        var s = el.GetString() ?? "";
+                        if (string.IsNullOrWhiteSpace(s)) return null;
+
+                        // Numeric string → same seconds/ms ambiguity.
+                        if (long.TryParse(s, out var asLong)) return InterpretLong(asLong);
+
+                        if (DateTimeOffset.TryParse(s,
+                                System.Globalization.CultureInfo.InvariantCulture,
+                                System.Globalization.DateTimeStyles.AssumeUniversal |
+                                System.Globalization.DateTimeStyles.AdjustToUniversal,
+                                out var dto))
+                        {
+                            return dto.UtcDateTime;
+                        }
+                        return null;
+                    }
+
+                    default:
+                        return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static DateTime? InterpretLong(long raw)
+        {
+            if (raw <= 0) return null;
+            // 10-digit values are seconds, 13-digit values are milliseconds.
+            // Anything ≥ 10^12 must be milliseconds (seconds would be year 33k).
+            return raw >= 100_000_000_000L
+                ? DateTimeOffset.FromUnixTimeMilliseconds(raw).UtcDateTime
+                : DateTimeOffset.FromUnixTimeSeconds(raw).UtcDateTime;
         }
 
         private static string TryExtractError(string raw)

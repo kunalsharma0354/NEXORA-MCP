@@ -1,0 +1,22 @@
+{
+  "id": "testing-quality-assurance",
+  "name": "Testing & Quality Assurance",
+  "version": "1.0.0",
+  "description": "Create a risk-based test strategy and verify user-visible behavior with reliable, reproducible evidence.",
+  "category": "testing",
+  "tags": [
+    "testing",
+    "qa",
+    "unit-tests",
+    "integration-tests",
+    "e2e"
+  ],
+  "status": "available",
+  "entrypoint": "SKILL.md",
+  "dependencies": [],
+  "trust": {
+    "publisher": "nexora-community-starter",
+    "review_status": "starter-reviewed",
+    "requires_runtime_validation": true
+  }
+}
