@@ -1,5 +1,7 @@
 # NEXORA MCP
 
+![NEXORA MCP AI Agent Dashboard](assets/dashboard.png)
+
 Windows desktop application that doubles as a Model Context Protocol (MCP) server, integrating the NEXORA AI platform (`nexora-navy-omega.vercel.app`) with AI coding assistants such as OpenCode.
 
 One executable, two modes:
